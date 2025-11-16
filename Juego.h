@@ -9,27 +9,26 @@
 
 // Colaboración:
 //  - Colabora con Jugador, Crupier, Mazo y Carta para orquestar el juego.
+//  - Colabora con Mano para manejar las cartas del jugador.
 
 #ifndef JUEGO_H
 #define JUEGO_H
 
 #include "Jugador.h"
 #include "Crupier.h"
-#include "Mazo.h"
 
 class Juego {
 private:
-    Mazo mazo;
     Jugador jugador;
     Crupier crupier;
 
-
-
 public:
-    Juego(const std::string& nombreJugador, int saldoInicial);
+    Juego() {}
+    Juego(const std::string& nombreJugador, int saldoInicial) 
+        : jugador(nombreJugador, saldoInicial) {}
 
     bool prepararRonda(int apuesta);
-    void repartirInicial();
+    void Barajar();
     void turnoJugador(char comando);
     void turnoCrupier();
     int compararResultado() const;
@@ -37,6 +36,9 @@ public:
     void reiniciarRonda();
     bool mazoCorto() const;
     void rebarajarSiEsNecesario();
+    
+    Jugador& obtenerJugador() { return jugador; }
+    Crupier& obtenerCrupier() { return crupier; }
 };
 
 #endif // JUEGO_H

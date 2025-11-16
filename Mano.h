@@ -10,6 +10,7 @@
 //  - Colabora con Carta para calcular el valor de la mano.
 //  - Colabora con Jugador y Crupier.
 
+
 #ifndef MANO_H
 #define MANO_H
 
@@ -19,15 +20,14 @@
 class Mano {
 private:
     std::vector<Carta> cartas;
-    int suma;
 
 public:
     Mano();
 
     void agregarCarta(const Carta& carta);
     void limpiar();
-
-    int calcularSuma();
+    
+    int calcularSuma() const;
     int contarCartas() const;
     bool tieneBlackjack() const;
     bool estaPasado() const;

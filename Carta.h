@@ -1,4 +1,5 @@
-//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero 
+//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar ,
+//Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 7/10/2025
 
 // CRC: Clase Carta
@@ -10,6 +11,7 @@
 //  - Colabora con Mazo para formar el conjunto de cartas disponibles.
 //  - Colabora con Mano para formar la mano de jugador o crupier.
 
+
 #ifndef CARTA_H
 #define CARTA_H
 
@@ -17,21 +19,18 @@
 
 class Carta {
 private:
-    int numero;
-    char palo;
-    std::string nombre;
+  int Valornominal;
+  char Palo;
+  std::string Nombre;
 
 public:
-    Carta();
-    Carta(int numero, char palo, const std::string& nombre);
+  Carta();
+  Carta(int numero, char palo, const std::string &nombre);
 
-    int obtenerNumero() const;
-    void establecerNumero(int numero);
-
-    char obtenerPalo() const;
-    void establecerPalo(char palo);
-
-    int valorNominal() const;
+  int obtenerNominal() const;
+  char obtenerPalo() const;
+  std::string obtenerNombre() const;
+  void mostrarCarta() const;
 };
 
 #endif // CARTA_H

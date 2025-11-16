@@ -10,6 +10,7 @@
 //  - Colabora con Mano para manejar las cartas del jugador.
 //  - Colabora con Carta y Juego.
 
+
 #ifndef JUGADOR_H
 #define JUGADOR_H
 
@@ -19,20 +20,20 @@
 
 class Jugador {
 private:
-    std::string nombre;
     Mano mano;
+    std::string nombre;
     int saldo;
     int apuestaActual;
-
+    
 public:
     Jugador();
-    Jugador(const std::string& nombre, int saldoInicial = 0);
+    Jugador(const std::string& nombre, int saldoInicial);
 
-    const std::string& obtenerNombre() const;
-    void establecerNombre(const std::string& nombre);
+    std::string obtenerNombre() const;
 
     int obtenerSaldo() const;
     void establecerSaldo(int saldo);
+    int obtenerApuestaActual() const;
 
     bool puedeApostar(int monto) const;
     int ingresarApuesta() const;
@@ -46,7 +47,7 @@ public:
 
     const Mano& obtenerMano() const;
 
-    void pagarVictoria(bool blackjack);
+    int pagarVictoria(bool blackjack);
     void pagarEmpate();
     void pagarDerrota();
 

@@ -9,13 +9,13 @@
 // Colaboración:
 //  - Colabora con Mazo para robar cartas.
 //  - Colabora con Mano y Carta para controlar su mano.
+//  - Colabora con Jugador y Carta para jugar.
 
 #ifndef CRUPIER_H
 #define CRUPIER_H
 
 #include "Mano.h"
 #include "Carta.h"
-#include "Mazo.h"
 
 class Crupier {
 private:
@@ -27,11 +27,10 @@ public:
     void recibirCarta(const Carta& carta);
     int suma() const;
     int contarCartas() const;
-    void jugarTurno(Mazo& mazo);
     void limpiarMano();
 
     void mostrarPrimeraCarta() const;
-    void mostrarManoCompleta() const;
+    void MostrarManoCompleta() const;
 
     const Mano& obtenerMano() const;
 };
