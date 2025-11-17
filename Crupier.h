@@ -1,38 +1,27 @@
-//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero 
-//@fecha: 7/10/2025
+//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
+//@fecha: 16/11/2025
 
-// CRC: Clase Crupier
+// CRC: Clase Crupier (hereda de Usuario)
 // Responsabilidad:
 //  - Representa al crupier que reparte y juega según reglas.
 //  - Administra su mano y lógica de turno.
 
 // Colaboración:
+//  - Hereda de Usuario para manejar la mano.
 //  - Colabora con Mazo para robar cartas.
-//  - Colabora con Mano y Carta para controlar su mano.
-//  - Colabora con Jugador y Carta para jugar.
+//  - Colabora con Jugador para jugar.
 
 #ifndef CRUPIER_H
 #define CRUPIER_H
 
-#include "Mano.h"
-#include "Carta.h"
+#include "Usuario.h"
 
-class Crupier {
-private:
-    Mano mano;
-
+class Crupier : public Usuario {
 public:
     Crupier();
 
-    void recibirCarta(const Carta& carta);
-    int suma() const;
-    int contarCartas() const;
-    void limpiarMano();
-
     void mostrarPrimeraCarta() const;
     void MostrarManoCompleta() const;
-
-    const Mano& obtenerMano() const;
 };
 
 #endif // CRUPIER_H

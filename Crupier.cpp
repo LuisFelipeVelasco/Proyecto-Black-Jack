@@ -1,25 +1,20 @@
 #include "Crupier.h"
 #include <iostream>
 
-Crupier::Crupier() {}
+Crupier::Crupier() : Usuario() {}
 
-void Crupier::recibirCarta(const Carta& carta) {
-    mano.agregarCarta(carta);
+void Crupier::mostrarPrimeraCarta() const {
+    const std::vector<Carta>& cartas = mano.obtenerCartas();
+    if(!cartas.empty()) {
+        std::cout << "Crupier muestra: " << cartas[0].obtenerNombre() << "\n";
+    }
 }
 
-int Crupier::suma() const {
-    return mano.obtenerSuma();
-}
-
-int Crupier::contarCartas() const {
-    return mano.contarCartas();
-}
-
-void Crupier::limpiarMano() {
-    mano.limpiar();
-}
-
-
-const Mano& Crupier::obtenerMano() const {
-    return mano;
+void Crupier::MostrarManoCompleta() const {
+    std::cout << "\nMano del Crupier:\n";
+    const std::vector<Carta>& cartas = mano.obtenerCartas();
+    for(const auto& carta : cartas) {
+        std::cout << "  - " << carta.obtenerNombre() << "\n";
+    }
+    std::cout << "Total: " << suma() << " puntos\n";
 }
