@@ -19,18 +19,18 @@
 
 class Carta {
 private:
-  int Valornominal;
-  char Palo;
-  std::string Nombre;
+    int Valornominal;
+    char Palo;
+    std::string Nombre;
 
 public:
-  Carta();
-  Carta(int numero, char palo, const std::string &nombre);
+    Carta();
+    Carta(int numero, char palo, const std::string &nombre);
 
-  int obtenerNominal() const;
-  char obtenerPalo() const;
-  std::string obtenerNombre() const;
-  void mostrarCarta() const;
+    int obtenerNominal() const;
+    char obtenerPalo() const;
+    std::string obtenerNombre() const;
+    void mostrarCarta() const;
 };
 
 #endif // CARTA_H

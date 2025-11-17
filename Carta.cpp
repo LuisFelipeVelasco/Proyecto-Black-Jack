@@ -19,3 +19,6 @@ std::string Carta::obtenerNombre() const{
     return Nombre;
 }
 
+void Carta::mostrarCarta() const {
+    std::cout << Nombre << " de " << Palo << " (valor: " << Valornominal << ")\n";
+}

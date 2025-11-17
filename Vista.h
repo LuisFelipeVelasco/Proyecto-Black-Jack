@@ -19,8 +19,8 @@ private:
 public:
     Vista();
     void MostrarReglas();
-    void IniciarPrograma(Crupier& crupier , Jugador& jugador, Mazo& mazo);
-    void casoEspecificoBeta(Crupier& crupier , Jugador& jugador, Mazo& mazo);
+    void IniciarPrograma(Crupier& crupier , Jugador& jugador, Mazo& mazo, Juego& juego);
+    void casoEspecificoBeta(Crupier& crupier , Jugador& jugador, Mazo& mazo,Juego& juego);
     int IngresarApuesta(Jugador& jugador);
     void MostrarMano();
     void MostrarManoCompleta() const;

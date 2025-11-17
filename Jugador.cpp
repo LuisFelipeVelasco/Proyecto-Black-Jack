@@ -1,4 +1,6 @@
 #include "Jugador.h"
+#include "Mano.h"
+
 #include <iostream>
 
 Jugador::Jugador() : Usuario(), nombre(""), saldo(0), apuestaActual(0) {}
@@ -51,4 +53,9 @@ void Jugador::pagarDerrota() {
 
 int Jugador::obtenerApuestaActual() const {
     return apuestaActual;
+}
+void Jugador::mostrarMano() const {
+    std::cout << "Mano del jugador " << nombre << ":\n";
+    mano.mostrarMano();
+   // Mano::mostrarMano() sí está implementada
 }

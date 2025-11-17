@@ -1,4 +1,4 @@
-//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero 
+//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 7/10/2025
 
 #ifndef MAZO_H
@@ -14,7 +14,7 @@ private:
 
 public:
     Mazo();
-    
+
     void inicializar();
     void barajar();
     Carta repartirCarta();

@@ -45,3 +45,8 @@ int Mano::obtenerSuma() const{
 const std::vector<Carta>& Mano::obtenerCartas() const{
     return cartas;
 }
+void Mano::mostrarMano() const {
+    for (const auto& carta : cartas) {
+        carta.mostrarCarta();
+    }
+}
