@@ -6,10 +6,8 @@
 
 Vista::Vista() {}
 
-void Vista::IniciarPrograma(Crupier& crupier , Jugador& jugador, Mazo& mazo) {
-
+void Vista::IniciarPrograma(Crupier& crupier, Jugador& jugador, Mazo& mazo, Juego& juego) {
     int opcion;
-
     do {
         std::cout << "\n"
            "██████╗ ██╗      █████╗  ██████╗██╗  ██╗     ██╗ █████╗  ██████╗██╗  ██╗\n"
@@ -27,15 +25,8 @@ void Vista::IniciarPrograma(Crupier& crupier , Jugador& jugador, Mazo& mazo) {
         std::cin >> opcion;
 
         if (opcion == 1) {
-            std::string nombre;
-            int saldo;
-            std::cout << "\nIngrese su nombre: ";
-            std::cin.ignore();
-            std::getline(std::cin, nombre);
-            std::cout << "Ingrese su saldo inicial: $";
-            std::cin >> saldo;
-            Jugador jugador(nombre,saldo);
-            casoEspecificoBeta(crupier,jugador,mazo);
+
+            casoEspecificoBeta(crupier,jugador,mazo, juego);
             std::cout << "\nPresione Enter para volver al menú...";
             std::cin.ignore();
             std::cin.get();
@@ -58,18 +49,22 @@ void Vista::IniciarPrograma(Crupier& crupier , Jugador& jugador, Mazo& mazo) {
 }
 
 
-void Vista::casoEspecificoBeta(Crupier& crupier , Jugador& jugador, Mazo& mazo) {
+void Vista::casoEspecificoBeta(Crupier& crupier, Jugador& jugador, Mazo& mazo, Juego& juego) {
+
+
+
+
     std::cout << "\n╔════════════════════════════════════════════════════════════╗\n";
-    std::cout << "║          BLACKJACK - DEMO BETA (CASO ESPECÍFICO)          ║\n";
-    std::cout << "╚════════════════════════════════════════════════════════════╝\n";
+    std::cout << "║                BLACKJACK - MODO BETA REAL                  ║\n";
+    std::cout << "╚════════════════════════════════════════════════════════════╝\n\n";
 
 
-    std::cout << "\n¡Bienvenido " << jugador.obtenerNombre() << " a Blackjack!\n";
+
+    std::cout << "¡Bienvenido " << jugador.obtenerNombre() << "!\n";
     std::cout << "Saldo inicial: $" << jugador.obtenerSaldo() << "\n";
+    juego = Juego(jugador.obtenerNombre(), jugador.obtenerSaldo());
 
-    std::cout << "\n[Sistema] Mazo inicializado con " << mazo.tamano() << " cartas.\n";
-    mazo.barajar();
-    std::cout << "[Sistema] Mazo barajado.\n";
+    juego.rebarajarSiEsNecesario();
 
     std::cout << "\n" << std::string(60, '=') << "\n";
     std::cout << "INICIO DE LA RONDA\n";
@@ -77,185 +72,59 @@ void Vista::casoEspecificoBeta(Crupier& crupier , Jugador& jugador, Mazo& mazo) 
 
     int apuesta = IngresarApuesta(jugador);
 
-    if(!jugador.colocarApuesta(apuesta)) {
-        std::cout << "No se pudo realizar la apuesta.\n";
+    if(!juego.prepararRonda(apuesta)) {
+        std::cout << "No se pudo colocar la apuesta.\n";
         return;
     }
-    else {
-        std::cout << "Apuesta de $" << apuesta << " colocada.\n";
-        std::cout << "Saldo restante: $" << jugador.obtenerSaldo()<< std::endl;
+
+    // repartir
+    juego.Barajar();
+
+    // si el jugador tiene blackjack natural termina la ronda
+    if(jugador.obtenerMano().tieneBlackjack()) {
+        std::cout << "\n¡BLACKJACK! Fin de la ronda.\n";
+        juego.liquidarResultado();
+        return;
     }
 
-    std::cout << "\n--- REPARTO INICIAL ---\n";
-
-
-    // se pasan cartas
-    Carta carta1Jugador(6, 'T', "6 de Trebol");
-    Carta carta2Jugador(4, 'C', "4 de Corazones");
-
-    Carta carta1Crupier(9, 'P', "9 de Picas");
-    Carta carta2Crupier(6, 'D', "6 de Diamantes");
-
-    std::cout << "\nJugador recibe:\n";
-    std::cout << jugador.obtenerNombre() << " recibe: ";
-    jugador.recibirCarta(carta1Jugador);
-    std::cout<<carta1Jugador.obtenerNombre();
-    std::cout << jugador.obtenerNombre() << " recibe: ";
-    std::cout<<carta2Jugador.obtenerNombre();
-
-
-    std::cout << "\nCrupier recibe:\n";
-    std::cout << "Crupier muestra: ";
-    std::cout<<carta1Crupier.obtenerNombre();
-
-    crupier.recibirCarta(carta1Crupier);
-
-    std::cout << "Crupier tiene una carta oculta (boca abajo)\n";
-    crupier.recibirCarta(carta2Crupier);
-
-    MostrarMano();
-    std::cout << "\nMano de " << jugador.obtenerNombre() << ":\n";
-    std::cout << "Total: " << jugador.suma() << " puntos\n";
-
-
+    // TURNO DEL JUGADOR
     std::cout << "\n" << std::string(60, '=') << "\n";
     std::cout << "TURNO DEL JUGADOR\n";
     std::cout << std::string(60, '=') << "\n";
 
-    std::cout << "\n¿Qué deseas hacer?\n";
-    std::cout << "  [P] Pedir carta\n";
-    std::cout << "  [S] Plantarse\n";
-    std::cout << "Opción: ";
-    char opcion1;
-    std::cin >> opcion1;
+    char opcion = ' ';
 
-    if(opcion1 == 'P' || opcion1 == 'p') {
-        Carta carta3Jugador(9, 'D', "9 de Diamantes");
-        std::cout << "\n" << jugador.obtenerNombre() << " pide una carta.\n";
-        jugador.recibirCarta(carta3Jugador);
-        MostrarMano();
-        std::cout << "\nMano de " << jugador.obtenerNombre() << ":\n";
-        std::cout << "Total: " << jugador.suma() << " puntos\n";
-    }
+    while(true) {
 
-    if(!jugador.obtenerMano().estaPasado()) {
         std::cout << "\n¿Qué deseas hacer?\n";
         std::cout << "  [P] Pedir carta\n";
         std::cout << "  [S] Plantarse\n";
         std::cout << "Opción: ";
-        char opcion2;
-        std::cin >> opcion2;
+        std::cin >> opcion;
 
-        if(opcion2 == 'P' || opcion2 == 'p') {
-            Carta carta4Jugador(2, 'P', "2 de Picas");
-            std::cout << "\n" << jugador.obtenerNombre() << " pide una carta.\n";
-            jugador.recibirCarta(carta4Jugador);
-            MostrarMano();
-            std::cout << "\nMano de " << jugador.obtenerNombre() << ":\n";
-            std::cout << "Total: " << jugador.suma() << " puntos\n";
+        juego.turnoJugador(opcion);
 
-            if(jugador.suma() == 21) {
-                std::cout << "\n¡¡¡PERFECTO!!! Has llegado a 21 puntos.\n";
-            }
-        }
+        if(opcion == 'S' || opcion == 's') break;
+        if(jugador.obtenerMano().estaPasado()) break;
     }
 
-    std::cout << "\n¿Qué deseas hacer?\n";
-    std::cout << "  [P] Pedir carta\n";
-    std::cout << "  [S] Plantarse\n";
-    std::cout << "Opción: ";
-    char opcion3;
-    std::cin >> opcion3;
-
-    if(opcion3 == 'S' || opcion3 == 's') {
-        std::cout << "\n" << jugador.obtenerNombre() << " se planta con " << jugador.suma() << " puntos.\n";
+    // si el jugador se pasó termina la ronda
+    if(jugador.obtenerMano().estaPasado()) {
+        juego.liquidarResultado();
+        return;
     }
 
-    std::cout << "\n" << std::string(60, '=') << "\n";
-    std::cout << "TURNO DEL CRUPIER\n";
-    std::cout << std::string(60, '=') << "\n";
+    // TURNO DEL CRUPIER
+    juego.turnoCrupier();
 
-    std::cout << "\nEl crupier revela su carta oculta: ";
-    std::cout<<carta2Crupier.obtenerNombre();
-
-
-    MostrarManoCompleta();
-
-    if(crupier.suma() < 17) {
-        std::cout << "\nEl crupier tiene menos de 17, debe pedir carta...\n";
-        Carta cartaCrupier(8, 'C', "8 de Corazones");
-        crupier.recibirCarta(cartaCrupier);
-        MostrarManoCompleta();
-
-        if(crupier.obtenerMano().estaPasado()) {
-            std::cout << "\n¡¡¡EL CRUPIER SE PASÓ DE 21!!!\n";
-        }
-    }
-
+    // FINAL
     std::cout << "\n" << std::string(60, '=') << "\n";
     std::cout << "RESULTADO FINAL\n";
     std::cout << std::string(60, '=') << "\n";
 
-    std::cout << "\n" << jugador.obtenerNombre() << ": " << jugador.suma() << " puntos\n";
-    std::cout << "Crupier: " << crupier.suma() << " puntos";
-
-    if(crupier.obtenerMano().estaPasado()) {
-        std::cout << " (SE PASÓ)\n";
-    } else {
-        std::cout << "\n";
-    }
-
-    if(jugador.obtenerMano().estaPasado()) {
-        std::cout << "\n❌ " << jugador.obtenerNombre() << " SE PASÓ - PIERDE\n";
-        jugador.pagarDerrota();
-        std::cout << "\n" << jugador.obtenerNombre() << " PIERDE. Apuesta perdida: $" << jugador.obtenerApuestaActual() << std::endl;
-        std::cout << "Saldo restante: $" << jugador.obtenerSaldo()<< std::endl;
-    }
-    else if(crupier.obtenerMano().estaPasado()) {
-        std::cout << "\n✅ ¡" << jugador.obtenerNombre() << " GANA! - El crupier se pasó\n";
-        bool esBlackjack = jugador.obtenerMano().tieneBlackjack();
-        int ganancia=jugador.pagarVictoria(esBlackjack);
-        std::cout << "\n¡" <<jugador.obtenerNombre() << " GANA!";
-        if(esBlackjack) {
-            std::cout << " ¡BLACKJACK! Pago 3:2";
-        }
-        std::cout << "\nGanancia: $" << ganancia<< std::endl;
-        std::cout << "Nuevo saldo: $" << jugador.obtenerSaldo() << std::endl;
-    }
-    else if(jugador.suma() > crupier.suma()) {
-        std::cout << "\n✅ ¡" << jugador.obtenerNombre() << " GANA!\n";
-        bool esBlackjack = jugador.obtenerMano().tieneBlackjack();
-        int ganancia=jugador.pagarVictoria(esBlackjack);
-        if(esBlackjack) {
-            std::cout << " ¡BLACKJACK! Pago 3:2";
-        }
-        std::cout << "\nGanancia: $" << ganancia<< std::endl;
-        std::cout << "Nuevo saldo: $" << jugador.obtenerSaldo() << std::endl;
-
-    }
-    else if(jugador.suma() < crupier.suma()) {
-        std::cout << "\n❌ El crupier GANA\n";
-        jugador.pagarDerrota();
-        std::cout << "\n" << jugador.obtenerNombre() << " PIERDE. Apuesta perdida: $" << jugador.obtenerApuestaActual() << std::endl;
-        std::cout << "Saldo restante: $" << jugador.obtenerSaldo()<< std::endl;
-    }
-    else {
-        std::cout << "\n🤝 EMPATE (Push)\n";
-        jugador.pagarEmpate();
-        std::cout << "\nEMPATE - Se devuelve la apuesta de $" << jugador.obtenerApuestaActual()<< std::endl;
-        std::cout << "Saldo actual: $" << jugador.obtenerSaldo()<< std::endl;
-    }
-
-    std::cout << "\n[Sistema] Cartas restantes en el mazo: " << mazo.tamano() << "\n";
-    if(mazo.mazoCorto()) {
-        std::cout << "[Sistema] ⚠️  El mazo tiene pocas cartas, se recomienda rebarajar.\n";
-    }
-
-    std::cout << "\n" << std::string(60, '=') << "\n";
-    std::cout << "FIN DE LA RONDA BETA\n";
-    std::cout << "Saldo final de " << jugador.obtenerNombre() << ": $" << jugador.obtenerSaldo() << "\n";
-    std::cout << std::string(60, '=') << "\n";
+    juego.liquidarResultado();
 }
+
 
 
 

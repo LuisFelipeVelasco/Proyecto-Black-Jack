@@ -1,4 +1,4 @@
-//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero 
+//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 7/10/2025
 
 // CRC: Clase Mano
@@ -26,12 +26,13 @@ public:
 
     void agregarCarta(const Carta& carta);
     void limpiar();
-    
+
     int calcularSuma() const;
     int contarCartas() const;
     bool tieneBlackjack() const;
     bool estaPasado() const;
     int obtenerSuma() const;
+    void mostrarMano() const;
     const std::vector<Carta>& obtenerCartas() const;
 };
 
