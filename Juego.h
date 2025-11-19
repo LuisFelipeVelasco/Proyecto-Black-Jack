@@ -1,4 +1,4 @@
-//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero 
+//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 7/10/2025
 
 
@@ -24,19 +24,19 @@ private:
 
 public:
     Juego() {}
-    Juego(const std::string& nombreJugador, int saldoInicial) 
+    Juego(const std::string& nombreJugador, int saldoInicial)
         : jugador(nombreJugador, saldoInicial) {}
 
     bool prepararRonda(int apuesta);
     void Barajar();
     void turnoJugador(char comando);
-    void turnoCrupier();
+    bool turnoCrupier();
     int compararResultado() const;
     void liquidarResultado();
     void reiniciarRonda();
     bool mazoCorto() const;
-    void rebarajarSiEsNecesario();
-    
+    bool rebarajarSiEsNecesario();
+
     Jugador& obtenerJugador() { return jugador; }
     Crupier& obtenerCrupier() { return crupier; }
 };
