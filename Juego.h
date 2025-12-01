@@ -1,21 +1,36 @@
 //@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 7/10/2025
 
-
-// CRC: Clase Juego
-// Responsabilidad:
-//  - Controla el flujo completo del juego Blackjack.
-//  - Administra ronda, turnos, apuestas y resultado final.
-
-// Colaboración:
-//  - Colabora con Jugador, Crupier, Mazo y Carta para orquestar el juego.
-//  - Colabora con Mano para manejar las cartas del jugador.
-
 #ifndef JUEGO_H
 #define JUEGO_H
 
 #include "Jugador.h"
 #include "Crupier.h"
+
+
+/*
+=================================================================================================================
+                                            TARJETA CRC
+=================================================================================================================
+CLASE:
+     Juego
+
+RESPONSABILIDADES:
+     - Cordinar el flujo del juego
+     - Gestionar al jugador, crupier, mazo, y vista
+     - Inicar y reiniciar partidas
+     - COntrolar turnos y resultados
+     - Robar cartas del mazo
+
+COlABORADORES:
+     - Jugador
+     - Crupier
+     - Mazo
+     - Vista
+
+
+*/
+
 
 class Juego {
 private:

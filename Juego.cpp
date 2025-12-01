@@ -3,7 +3,19 @@
 #include "Juego.h"
 #include <iostream>
 
- static Mazo mazoGlobal;
+
+/*
+=================================================================================================================
+                                 Implementacion de la clase Juego
+=================================================================================================================
+Este archivo implementa la lógica principal de la partida de BlackJack. Controla el flujo del juego: 
+iniciar ronda, repartir cartas, gestionar turnos del jugador y del crupier, determinar el ganador y 
+reiniciar el estado para nuevas partidas.También coordina la interacción entre Mazo, Jugador, Crupier y Vista.
+=================================================================================================================
+
+*/
+
+static Mazo mazoGlobal;
 
  bool Juego::prepararRonda(int apuesta) {
      reiniciarRonda();
@@ -25,7 +37,10 @@
      std::cout << "\n";
      Carta carta1 = mazoGlobal.repartirCarta();
    std::cout << "El crupier recibe: ";
-     carta1.mostrarCarta();
+
+
+     std::cout << carta1.obtenerNombre() << " de " << carta1.obtenerPalo() << " (valor: " << carta1.obtenerNominal() << ")\n";
+
      crupier.recibirCarta(carta1);
 
      Carta carta2 = mazoGlobal.repartirCarta();
@@ -136,6 +151,10 @@
     }
      else return false;
  }
-
+void Jugador::mostrarMano() const {
+     std::cout << "Mano del jugador " << nombre << ":\n";
+     mano.mostrarMano();
+     // Mano::mostrarMano() sí está implementada
+ }
 
 

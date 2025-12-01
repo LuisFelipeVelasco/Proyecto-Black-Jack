@@ -7,6 +7,24 @@
 #include <vector>
 #include "Carta.h"
 
+
+/*
+=================================================================================================================
+                                            TARJETA CRC
+=================================================================================================================
+CLASE:
+     mazo
+
+RESPONSABILIDADES:
+     - Crear la baraja de cartas 
+     - Barajar las  cartas 
+     - Reparitir las cartas
+     - Controlar las cartas
+COlABORADORES:
+     - Carta        
+
+
+*/
 class Mazo {
 private:
     std::vector<Carta> cartas;

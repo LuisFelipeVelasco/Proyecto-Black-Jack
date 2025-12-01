@@ -16,6 +16,23 @@
 #include "Mano.h"
 #include "Carta.h"
 
+
+/*
+=================================================================================================================
+                                            TARJETA CRC
+=================================================================================================================
+CLASE:
+     Usuario
+
+RESPONSABILIDADES:
+     - Contener la informacion del usuario y el jugador
+     - Registar nombre o otas caracteristicas basicas
+COlABORADORES:
+     - Ninguno directo
+      
+
+
+*/
 class Usuario {
 protected:
     Mano mano;

@@ -1,6 +1,17 @@
 #include "Jugador.h"
 #include <iostream>
 
+
+/*
+=================================================================================================================
+                                 Implementacion de la clase Jugador
+=================================================================================================================
+Implementa el comportamiento del jugador humano dentro del BlackJack. Maneja su mano, su estado dentro del 
+juego, decisiones como pedir o quedarse, y controla su apuesta o puntos según la implementación. También 
+contiene utilidades para mostrar la mano y calcular el puntaje.
+=================================================================================================================
+
+*/
 Jugador::Jugador() : Usuario(), nombre(""), saldo(0), apuestaActual(0) {}
 
 Jugador::Jugador(const std::string& nombre, int saldoInicial):

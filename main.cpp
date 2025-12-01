@@ -1,3 +1,6 @@
+//@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar ,
+//Jeronimo Imbachi , Leonardo Rosero
+
 #include "Jugador.h"
 #include "Crupier.h"
 #include "Mazo.h"

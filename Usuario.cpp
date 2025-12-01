@@ -1,6 +1,16 @@
 #include "Usuario.h"
 #include <iostream>
 
+
+/*
+=================================================================================================================
+                                 Implementacion de la clase Usuario
+=================================================================================================================
+Implementa la clase Usuario, que representa un usuario registrado en el juego. Se encarga de almacenar y 
+gestionar la información del jugador, como su nombre, identificador o datos relacionados al juego según la implementación actual.
+=================================================================================================================
+
+*/
 Usuario::Usuario() {}
 
 Usuario::~Usuario() {}

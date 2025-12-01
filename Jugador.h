@@ -1,14 +1,6 @@
 //@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 16/11/2025
 
-// CRC: Clase Jugador (hereda de Usuario)
-// Responsabilidad:
-//  - Representa al jugador humano.
-//  - Permite apostar, recibir cartas y mostrar su estado.
-
-// Colaboración:
-//  - Hereda de Usuario para manejar la mano.
-//  - Colabora con Carta y Juego.
 
 #ifndef JUGADOR_H
 #define JUGADOR_H
@@ -16,6 +8,27 @@
 #include <string>
 #include "Usuario.h"
 
+
+/*
+=================================================================================================================
+                                            TARJETA CRC
+=================================================================================================================
+CLASE:
+     Jugador
+
+RESPONSABILIDADES:
+     - Administrar la mano del jugador
+     - Robar cartas
+     - Decidir si pedir o quedarse
+     - Llevar del registro del estado del jugador
+     
+COlABORADORES:
+     - Mazo
+     - Mano
+     - Carta        
+
+
+*/
 class Jugador : public Usuario {
 private:
     std::string nombre;

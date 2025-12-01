@@ -1,21 +1,28 @@
 //@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar ,
 //Jeronimo Imbachi , Leonardo Rosero
-//@fecha: 7/10/2025
-
-// CRC: Clase Carta
-// Responsabilidad:
-//  - Representa una carta individual con valor nominal, tipo y nombre.
-//  - Permite consultar y modificar sus atributos.
-
-// Colaboración:
-//  - Colabora con Mazo para formar el conjunto de cartas disponibles.
-//  - Colabora con Mano para formar la mano de jugador o crupier.
-
-
 #ifndef CARTA_H
 #define CARTA_H
 
 #include <string>
+
+/*
+=================================================================================================================
+                                            TARJETA CRC
+=================================================================================================================
+CLASE:
+     Carta
+
+RESPONSABILIDADES:
+     - Representar una carta individual de la baraja
+     - Almacenar su valor numerico
+     - Almacenar su simbolo (palo)
+     - Convertir la carta en texto para mostrarla en pantalla
+
+COlABORADORES:
+     - Colabora con Mazo para formar el conjunto de cartas disponibles.
+     - Colabora con Mano para formar la mano de jugador o crupier.
+
+*/
 
 class Carta {
 private:
@@ -30,7 +37,6 @@ public:
   int obtenerNominal() const;
   char obtenerPalo() const;
   std::string obtenerNombre() const;
-  void mostrarCarta() const;
 };
 
 #endif // CARTA_H

@@ -3,7 +3,16 @@
 #include <iostream>
 
 
+/*
+=================================================================================================================
+                                 Implementacion de la clase vista
+=================================================================================================================
+Implementa la interfaz textual del programa. Contiene todos los métodos encargados de mostrar menús, 
+mensajes y resultados al usuario, así como recibir entradas. Actúa como el componente de la vista dentro del 
+modelo MVC del proyecto.
+=================================================================================================================
 
+*/
 Vista::Vista() {}
 
 void Vista::IniciarPrograma(Crupier& crupier, Jugador& jugador, Mazo& mazo, Juego& juego) {

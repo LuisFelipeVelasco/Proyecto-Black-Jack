@@ -3,6 +3,16 @@
 #include <random>
 #include <chrono>
 
+
+/*
+=================================================================================================================
+                                 Implementacion de la clase Mazo
+=================================================================================================================
+Implementa el mazo de cartas del juego. Se encarga de crear todas las cartas, barajar el mazo y entregar 
+cartas una a una durante la partida. También permite reiniciar el mazo cuando es necesario.
+=================================================================================================================
+
+*/
 Mazo::Mazo() : indiceActual(0) {
     inicializar();
 }
