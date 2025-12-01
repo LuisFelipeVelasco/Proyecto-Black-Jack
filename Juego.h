@@ -30,17 +30,17 @@ COlABORADORES:
 
 
 */
-
+class Vista;
 
 class Juego {
 private:
     Jugador jugador;
     Crupier crupier;
+    Vista& vista;
 
 public:
-    Juego() {}
-    Juego(const std::string& nombreJugador, int saldoInicial)
-        : jugador(nombreJugador, saldoInicial) {}
+    Juego(const std::string& nombreJugador, int saldoInicial, Vista& vista);
+    Juego();
 
     bool prepararRonda(int apuesta);
     void Barajar();
@@ -51,6 +51,7 @@ public:
     void reiniciarRonda();
     bool mazoCorto() const;
     bool rebarajarSiEsNecesario();
+    std::string MensajeVista(std::string mensaje);
 
     Jugador& obtenerJugador() { return jugador; }
     Crupier& obtenerCrupier() { return crupier; }

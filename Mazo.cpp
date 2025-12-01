@@ -21,7 +21,7 @@ void Mazo::inicializar() {
     cartas.clear();
     indiceActual = 0;
     
-    char palos[] = {'C', 'D', 'P', 'T'};
+    std::string palos[] = {"C", "D", "P", "T"};
     std::string nombresPalos[] = {"Corazones", "Diamantes", "Picas", "Trebol"};
     std::string nombres[] = {"As", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     int valores[] = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};

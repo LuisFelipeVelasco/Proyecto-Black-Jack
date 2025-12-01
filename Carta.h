@@ -27,15 +27,15 @@ COlABORADORES:
 class Carta {
 private:
   int Valornominal;
-  char Palo;
+  std::string Palo;
   std::string Nombre;
 
 public:
   Carta();
-  Carta(int numero, char palo, const std::string &nombre);
+  Carta(int numero, std::string& palo, const std::string &nombre);
 
   int obtenerNominal() const;
-  char obtenerPalo() const;
+  std::string obtenerPalo() const;
   std::string obtenerNombre() const;
 };
 

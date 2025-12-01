@@ -63,3 +63,7 @@ void Jugador::pagarDerrota() {
 int Jugador::obtenerApuestaActual() const {
     return apuestaActual;
 }
+
+void Jugador::mostrarMano() const {
+    mano.mostrarMano();
+}

@@ -3,11 +3,10 @@
 
 #include "Carta.h"
 #include "Mano.h"
-#include "Juego.h"
 #include "Jugador.h"
 #include "Mazo.h"
 #include "Crupier.h"
-
+#include "Juego.h"
 
 /*
 =================================================================================================================
@@ -43,6 +42,7 @@ public:
      int IngresarApuesta(Jugador& jugador);
      void MostrarMano();
      void MostrarManoCompleta() const;
+     void MostrarMensaje(std::string mensaje);
 
 
 };

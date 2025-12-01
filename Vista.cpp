@@ -1,8 +1,6 @@
 
 #include "Vista.h"
 #include <iostream>
-
-
 /*
 =================================================================================================================
                                  Implementacion de la clase vista
@@ -71,7 +69,6 @@ void Vista::casoEspecificoBeta(Crupier& crupier, Jugador& jugador, Mazo& mazo, J
 
     std::cout << "¡Bienvenido " << jugador.obtenerNombre() << "!\n";
     std::cout << "Saldo inicial: $" << jugador.obtenerSaldo() << "\n";
-    juego = Juego(jugador.obtenerNombre(), jugador.obtenerSaldo());
 
     bool rebarajar=juego.rebarajarSiEsNecesario();
     if (rebarajar) std::cout << "\n¡Quedan pocas cartas! Rebarajando el mazo...\n";
@@ -211,6 +208,9 @@ void Vista::MostrarManoCompleta() const {
         std::cout<<carta.obtenerNombre();
     }
     std::cout << "Total: " << crupier.suma()<< " puntos\n";
+}
+void Vista:: MostrarMensaje(std::string mensaje) {
+    std::cout << mensaje;
 }
 
 

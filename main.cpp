@@ -19,7 +19,7 @@ int main() {
     Jugador jugador(nombre, saldo);
     Crupier crupier;
     Mazo mazo;
-    Juego juego(jugador.obtenerNombre(), jugador.obtenerSaldo());
+    Juego juego(jugador.obtenerNombre(), jugador.obtenerSaldo(),vista);
     vista.IniciarPrograma(crupier , jugador, mazo, juego);
     return 0;
 }

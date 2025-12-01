@@ -1,7 +1,8 @@
 #include "Juego.h"
 #include "Mazo.h"
-#include "Juego.h"
 #include <iostream>
+#include "Vista.h"
+#include <sstream>
 
 
 /*
@@ -17,56 +18,62 @@ reiniciar el estado para nuevas partidas.También coordina la interacción entre
 
 static Mazo mazoGlobal;
 
- bool Juego::prepararRonda(int apuesta) {
+Juego::Juego(const std::string& nombreJugador, int saldoInicial, Vista& vista)
+    : jugador(nombreJugador, saldoInicial) , vista(vista) {
+}
+
+
+bool Juego::prepararRonda(int apuesta) {
      reiniciarRonda();
 
      if(!jugador.colocarApuesta(apuesta)) {
          return false;
      }
-
-
      return true;
  }
 
  void Juego::Barajar() {
-
-
      jugador.recibirCarta(mazoGlobal.repartirCarta());
      jugador.recibirCarta(mazoGlobal.repartirCarta());
-
      std::cout << "\n";
      Carta carta1 = mazoGlobal.repartirCarta();
-   std::cout << "El crupier recibe: ";
-
-
-     std::cout << carta1.obtenerNombre() << " de " << carta1.obtenerPalo() << " (valor: " << carta1.obtenerNominal() << ")\n";
-
+    vista.MostrarMensaje("El crupier recibe");
+    std::ostringstream mensaje;
+     mensaje << carta1.obtenerNombre() << " de " << carta1.obtenerPalo() << " (valor: " << carta1.obtenerNominal() << ")\n";
+    vista.MostrarMensaje(mensaje.str());
      crupier.recibirCarta(carta1);
-
      Carta carta2 = mazoGlobal.repartirCarta();
-     std::cout << "El crupier tiene una carta oculta\n";
+    vista.MostrarMensaje("El crupier tiene una carta oculta\n");
      crupier.recibirCarta(carta2);
 
      jugador.mostrarMano();
 
      if(jugador.obtenerMano().tieneBlackjack()) {
-         std::cout << "\n¡¡¡BLACKJACK NATURAL!!!\n";
+         vista.MostrarMensaje("¡¡¡BLACKJACK NATURAL¡¡¡\n");
      }
  }
 
  void Juego::turnoJugador(char comando) {
      if(comando == 'P' || comando == 'p') {
-         std::cout << "\n" << jugador.obtenerNombre() << " pide una carta.\n";
+         std::ostringstream mensaje;
+         mensaje<< "\n" << jugador.obtenerNombre() << " pide una carta.\n";
+         vista.MostrarMensaje(mensaje.str());
          jugador.recibirCarta(mazoGlobal.repartirCarta());
+         mensaje<<"Mano del jugador " << jugador.obtenerNombre()<< ":\n";
+         vista.MostrarMensaje(mensaje.str());
          jugador.mostrarMano();
 
          if(jugador.obtenerMano().estaPasado()) {
-             std::cout << "\n¡¡¡SE PASÓ DE 21!!! " << jugador.obtenerNombre() << " PIERDE.\n";
+             std::ostringstream mensaje;
+             mensaje<< "\n¡¡¡SE PASÓ DE 21!!! " << jugador.obtenerNombre() << " PIERDE.\n";
+             vista.MostrarMensaje(mensaje.str());
          }
      }
      else if(comando == 'S' || comando == 's') {
-         std::cout << "\n" << jugador.obtenerNombre() << " se planta con "
+         std::ostringstream mensaje;
+         mensaje<< "\n" << jugador.obtenerNombre() << " se planta con "
                    << jugador.suma() << " puntos.\n";
+         vista.MostrarMensaje(mensaje.str());
      }
  }
 
@@ -75,7 +82,7 @@ static Mazo mazoGlobal;
      crupier.MostrarManoCompleta();
 
      while(crupier.suma() < 17) {
-         std::cout << "\nEl crupier debe pedir (menos de 17)...\n";
+         vista.MostrarMensaje("\nEl crupier debe pedir (menos de 17)...\n");
          crupier.recibirCarta(mazoGlobal.repartirCarta());
          crupier.MostrarManoCompleta();
 
@@ -151,10 +158,10 @@ static Mazo mazoGlobal;
     }
      else return false;
  }
-void Jugador::mostrarMano() const {
-     std::cout << "Mano del jugador " << nombre << ":\n";
-     mano.mostrarMano();
-     // Mano::mostrarMano() sí está implementada
- }
+
+
+std::string Juego::MensajeVista(std::string mensaje) {
+    vista.MostrarMensaje(mensaje);
+}
 
 
