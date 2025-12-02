@@ -11,26 +11,21 @@ CLASE:
      Vista
 
 RESPONSABILIDADES:
-     - Mostrar infomacion en pantalla
+     - Mostrar información en pantalla
      - Interactuar con el usuario (entradas y salidas)
-     - mostrar reglas, manos, resultados, etc
+     - Mostrar reglas, manos, resultados, etc
 
-
-COlABORADORES:
+COLABORADORES:
      - Jugador 
      - Crupier
      - Carta       
      - Mano
-
-     
 */
-
-
-
 
 class Vista {
 private:
      Juego* juego;
+     
 public:
      Vista();
      void setJuego(Juego* j);
@@ -40,11 +35,8 @@ public:
      void MostrarMano();
      void MostrarManoCompleta();
      void MostrarMensaje(std::string mensaje);
-     std::string MostrarMensajeYRecibirRespuesta(std:: string mensaje);
+     std::string MostrarMensajeYRecibirRespuesta(std::string mensaje);
      bool EsperarEnter(std::string Mensaje);
-
-
 };
-
 
 #endif //SEGUNDO_PROYECTO_VISTA_H

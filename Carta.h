@@ -34,9 +34,14 @@ public:
   Carta();
   Carta(int numero, std::string& palo, const std::string &nombre);
 
+
+
   int obtenerNominal() const;
   std::string obtenerPalo() const;
   std::string obtenerNombre() const;
+
+
+
 };
 
 #endif // CARTA_H

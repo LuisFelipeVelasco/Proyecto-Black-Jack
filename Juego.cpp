@@ -4,11 +4,12 @@
 #include "Vista.h"
 #include <sstream>
 #include "Jugador.h"
+#include <cctype>
 
 static Mazo mazoGlobal;
 
-Juego::Juego(const std::string& nombreJugador, int saldoInicial, Vista& vista, Mazo& mazo, Crupier& crupier , Mano& mano )
-    : jugador(nombreJugador, saldoInicial), vista(vista), mazo(mazo), crupier(crupier) , mano(mano) {
+Juego::Juego(const std::string& nombreJugador, int saldoInicial, Vista& vista, Mazo& mazo, Crupier& crupier, Mano& mano)
+    : jugador(nombreJugador, saldoInicial), vista(vista), mazo(mazo), crupier(crupier), mano(mano) {
 }
 
 bool Juego::prepararRonda(int apuesta) {
@@ -44,12 +45,28 @@ void Juego::Barajar() {
     }
 }
 
+// Método mejorado para validar comandos
+bool Juego::validarComando(const std::string& comando) {
+    std::string cmd = comando;
+    for(auto& c : cmd) c = toupper(c);
+    
+    return (cmd == "P" || cmd == "PEDIR" || cmd == "HIT" ||
+            cmd == "S" || cmd == "PLANTARSE" || cmd == "STAND" ||
+            cmd == "D" || cmd == "DOBLAR" || cmd == "DOUBLE");
+}
+
+// Método mejorado del turno del jugador con soporte para Doblar
 void Juego::turnoJugador(std::string comando) {
-    if(comando == "P" || comando == "p") {
+    // Convertir a mayúscula para simplificar comparaciones
+    for(auto& c : comando) c = toupper(c);
+    
+    if(comando == "P" || comando == "PEDIR" || comando == "HIT") {
         std::ostringstream mensaje;
         mensaje << "\n" << jugador.obtenerNombre() << " pide una carta.\n";
         vista.MostrarMensaje(mensaje.str());
+        
         jugador.recibirCarta(mazoGlobal.repartirCarta());
+        
         mensaje.str("");
         mensaje << "Mano del jugador " << jugador.obtenerNombre() << ":\n";
         vista.MostrarMensaje(mensaje.str());
@@ -57,17 +74,65 @@ void Juego::turnoJugador(std::string comando) {
 
         if(jugador.obtenerMano().estaPasado()) {
             std::ostringstream msg;
-            msg << "\n¡¡¡SE PASÓ DE 21!!! " << jugador.obtenerNombre() << " PIERDE.\n";
+            msg << "\n¡¡¡SE PASÓ DE 21!!! " << jugador.obtenerNombre() 
+                << " PIERDE.\n";
             vista.MostrarMensaje(msg.str());
         }
     }
-    else if(comando == "S" || comando == "s") {
+    else if(comando == "S" || comando == "PLANTARSE" || comando == "STAND") {
         std::ostringstream mensaje;
         mensaje << "\n" << jugador.obtenerNombre() << " se planta con "
                 << jugador.suma() << " puntos.\n";
         vista.MostrarMensaje(mensaje.str());
     }
+    else if(comando == "D" || comando == "DOBLAR" || comando == "DOUBLE") {
+        // Doblar solo si es la primera jugada (2 cartas)
+        if(jugador.contarCartas() != 2) {
+            vista.MostrarMensaje("\n⚠️ Solo puedes doblar con tus dos primeras cartas.\n");
+            return;
+        }
+        
+        // Verificar que tiene suficiente saldo
+        if(!jugador.puedeApostar(jugador.obtenerApuestaActual())) {
+            vista.MostrarMensaje("\n⚠️ No tienes suficiente saldo para doblar.\n");
+            return;
+        }
+        
+        int apuestaOriginal = jugador.obtenerApuestaActual();
+        
+        std::ostringstream mensaje;
+        mensaje << "\n💰 " << jugador.obtenerNombre() << " dobla su apuesta de $" 
+                << apuestaOriginal << " a $" 
+                << (apuestaOriginal * 2) << ".\n";
+        vista.MostrarMensaje(mensaje.str());
+        
+        // Correccion de usar el método doblarApuesta() que maneja correctamente el saldo
+        if(!jugador.doblarApuesta()) {
+            vista.MostrarMensaje("\n⚠️ Error al doblar la apuesta.\n");
+            return;
+        }
+        
+        // Recibir exactamente una carta más
+        vista.MostrarMensaje("\nRecibiendo una carta final...\n");
+        jugador.recibirCarta(mazoGlobal.repartirCarta());
+        
+        mensaje.str("");
+        mensaje << "Mano del jugador " << jugador.obtenerNombre() << ":\n";
+        vista.MostrarMensaje(mensaje.str());
+        jugador.mostrarMano();
+
+        if(jugador.obtenerMano().estaPasado()) {
+            std::ostringstream msg;
+            msg << "\n¡¡¡SE PASÓ DE 21!!! " << jugador.obtenerNombre() 
+                << " PIERDE.\n";
+            vista.MostrarMensaje(msg.str());
+        }
+    }
+    else {
+        vista.MostrarMensaje("\n⚠️ Opción no válida. Usa: [P]edir, [S]Plantarse, [D]oblar\n");
+    }
 }
+
 
 bool Juego::turnoCrupier() {
     vista.MostrarManoCompleta();
@@ -142,6 +207,7 @@ void Juego::reiniciarRonda() {
     crupier.limpiarMano();
     jugador.limpiarApuesta();
 }
+
 bool Juego::mazoCorto() const {
     return mazoGlobal.mazoCorto();
 }
@@ -160,19 +226,17 @@ void Juego::MensajeVista(std::string mensaje) {
 }
 
 void Juego::InterfazPrograma() {
-   int opcion;
+    int opcion;
     do {
-        int opcion=vista.InterfazInicial();
-
+        opcion = vista.InterfazInicial();
 
         if (opcion == 1) {
             if(jugador.obtenerSaldo() <= 0) {
-                bool Acabar= vista.EsperarEnter("Te has quedado sin dinero! Game Over.\n");
-                if (Acabar==true) break;
+                bool Acabar = vista.EsperarEnter("💔 Te has quedado sin dinero! Game Over.\n");
+                if (Acabar == true) break;
             }
-           Ronda();
-
-            vista.EsperarEnter("Presione Enter para volver al menu...");
+            Ronda();
+            vista.EsperarEnter("\nPresione Enter para volver al menú...");
         }
         else if (opcion == 2) {
             vista.MostrarReglas();
@@ -180,11 +244,12 @@ void Juego::InterfazPrograma() {
         }
         else if (opcion == 3) {
             std::ostringstream mensaje;
-            mensaje<<"\n ¡Gracias por jugar! Saldo final: $"<< jugador.obtenerSaldo() << "\n"<< "Hasta luego.\n";
+            mensaje << "\n👋 ¡Gracias por jugar! Saldo final: $" << jugador.obtenerSaldo() << "\n"
+                    << "Hasta luego.\n";
             vista.EsperarEnter(mensaje.str());
         }
         else {
-            vista.MostrarMensaje("\n⚠ Opción no válida. Intente nuevamente.\n");
+            vista.MostrarMensaje("\n⚠️ Opción no válida. Intente nuevamente.\n");
         }
 
     } while (opcion != 3);
@@ -192,59 +257,123 @@ void Juego::InterfazPrograma() {
 
 void Juego::Ronda() {
     std::ostringstream mensaje;
-    mensaje << "¡Bienvenido " << jugador.obtenerNombre() << "!\n"
-            << " Saldo actual: $" << jugador.obtenerSaldo() << "\n";
+    mensaje << "\n¡Bienvenido " << jugador.obtenerNombre() << "!\n"
+            << "💵 Saldo actual: $" << jugador.obtenerSaldo() << "\n";
     vista.MostrarMensaje(mensaje.str());
-    bool rebarajar =rebarajarSiEsNecesario();
-    if (rebarajar) vista.MostrarMensaje("¡Quedan pocas cartas! Rebarajando el mazo...\n");
-    mensaje << "\n" << std::string(60, '=') << "\n"<< " INICIO DE LA RONDA\n"<< std::string(60, '=') << "\n";
+    
+    bool rebarajar = rebarajarSiEsNecesario();
+    if (rebarajar) vista.MostrarMensaje("🔄 ¡Quedan pocas cartas! Rebarajando el mazo...\n");
+    
+    mensaje.str("");
+    mensaje << "\n" << std::string(60, '=') << "\n" << " INICIO DE LA RONDA\n" 
+            << std::string(60, '=') << "\n";
     vista.MostrarMensaje(mensaje.str());
+    
     int apuesta = vista.IngresarApuesta(jugador);
 
     if(!prepararRonda(apuesta)) {
-        vista.MostrarMensaje("No se pudo ingresar la apuesta");
+        vista.MostrarMensaje("❌ No se pudo ingresar la apuesta");
         return;
     }
 
-    vista.MostrarMensaje("\n INICIANDO RONDA ===\n");
-    vista.MostrarMensaje("\n Repartiendo cartas iniciales...\n\n");
+    vista.MostrarMensaje("\n🎲 INICIANDO RONDA\n");
+    vista.MostrarMensaje("\n📇 Repartiendo cartas iniciales...\n\n");
     Barajar();
+    
     if(jugador.obtenerMano().tieneBlackjack()) {
-        vista.MostrarMensaje( "\n ¡BLACKJACK NATURAL! Fin de la ronda.\n");
-        mensaje << "\n" << std::string(50, '=') << "\n"<< "RESULTADO FINAL\n"<< std::string(50, '=') << "\n";
+        vista.MostrarMensaje("\n⭐ ¡BLACKJACK NATURAL! Fin de la ronda.\n");
+        mensaje.str("");
+        mensaje << "\n" << std::string(50, '=') << "\n" << "RESULTADO FINAL\n" 
+                << std::string(50, '=') << "\n";
         vista.MostrarMensaje(mensaje.str());
         liquidarResultado();
         return;
     }
-    mensaje << "\n" << std::string(60, '=') << "\n"<< " TURNO DEL JUGADOR\n"<< std::string(60, '=') << "\n";
+    
+    mensaje.str("");
+    mensaje << "\n" << std::string(60, '=') << "\n" << " TURNO DEL JUGADOR\n" 
+            << std::string(60, '=') << "\n";
     vista.MostrarMensaje(mensaje.str());
 
     std::string opcion;
+    bool turnoTerminado = false;
+    bool doblado = false;
 
-    while(true) {
-        opcion=vista.MostrarMensajeYRecibirRespuesta( "\n¿Qué deseas hacer?\n [P] Pedir carta\n [S] Plantarse\n Opcion:");
-        std::cout << "Opción: ";
-        std::cin >> opcion;
-
+    while(!turnoTerminado) {
+        // Mostrar opciones disponibles
+        std::string menuOpciones = "\n¿Qué deseas hacer?\n [P] Pedir carta (Hit)\n [S] Plantarse (Stand)\n";
+        
+        // Doblar solo disponible con 2 cartas y saldo suficiente
+        if(jugador.contarCartas() == 2 && 
+           jugador.puedeApostar(jugador.obtenerApuestaActual())) {
+            menuOpciones += " [D] Doblar apuesta (Double)\n";
+        }
+        
+        menuOpciones += " Opción: ";
+        opcion = vista.MostrarMensajeYRecibirRespuesta(menuOpciones);
+        
+        // Convertir a mayúscula
+        for(auto& c : opcion) c = toupper(c);
+        
+        // Validar entrada
+        if(!validarComando(opcion)) {
+            vista.MostrarMensaje("\n⚠️ Opción no válida. Intenta de nuevo.\n");
+            continue;
+        }
+        
+        // Si dobla, solo puede pedir una carta y termina su turno
+        if(opcion == "D" || opcion == "DOBLAR" || opcion == "DOUBLE") {
+            if(jugador.contarCartas() != 2) {
+                vista.MostrarMensaje("\n⚠️ Solo puedes doblar con tus dos primeras cartas.\n");
+                continue;
+            }
+            if(!jugador.puedeApostar(jugador.obtenerApuestaActual())) {
+                vista.MostrarMensaje("\n⚠️ No tienes suficiente saldo para doblar.\n");
+                continue;
+            }
+            doblado = true;
+        }
+        
+        // Ejecutar la acción
         turnoJugador(opcion);
-
-        if(opcion == "S" || opcion == "s") break;
-        if(jugador.obtenerMano().estaPasado()) break;
+        
+        // Verificar condiciones de finalización
+        if(opcion == "S" || opcion == "PLANTARSE" || opcion == "STAND") {
+            turnoTerminado = true;
+        }
+        else if(jugador.obtenerMano().estaPasado()) {
+            turnoTerminado = true;
+        }
+        else if(doblado) {
+            // Al doblar, solo se recibe una carta y termina el turno
+            std::ostringstream msg;
+            msg << "\n✋ " << jugador.obtenerNombre() 
+                << " termina su turno después de doblar.\n";
+            vista.MostrarMensaje(msg.str());
+            turnoTerminado = true;
+        }
     }
 
+    // Si el jugador se pasó, no continuar con el crupier
     if(jugador.obtenerMano().estaPasado()) {
         liquidarResultado();
         return;
     }
-    mensaje << "\n" << std::string(60, '=') << "\n TURNO DEL CRUPIER\n"<< std::string(60, '=') << "\n";
+    
+    mensaje.str("");
+    mensaje << "\n" << std::string(60, '=') << "\n TURNO DEL CRUPIER\n" 
+            << std::string(60, '=') << "\n";
     vista.MostrarMensaje(mensaje.str());
 
     bool EstadoCrupier = turnoCrupier();
-    if (!EstadoCrupier)
-        vista.MostrarMensaje( "\n ¡El crupier se pasó de 21!\n");
-    else
-        mensaje<<"\n El crupier se planta con " << obtenerCrupier().suma() << " puntos.\n";
+    if (!EstadoCrupier) {
+        vista.MostrarMensaje("\n💥 ¡El crupier se pasó de 21!\n");
+    }
+    else {
+        mensaje.str("");
+        mensaje << "\n✋ El crupier se planta con " << obtenerCrupier().suma() << " puntos.\n";
         vista.MostrarMensaje(mensaje.str());
+    }
 
     // FINAL
     liquidarResultado();

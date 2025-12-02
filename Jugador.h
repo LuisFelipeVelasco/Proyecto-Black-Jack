@@ -1,13 +1,11 @@
 //@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 16/11/2025
 
-
 #ifndef JUGADOR_H
 #define JUGADOR_H
 
 #include <string>
 #include "Usuario.h"
-
 
 /*
 =================================================================================================================
@@ -21,14 +19,14 @@ RESPONSABILIDADES:
      - Robar cartas
      - Decidir si pedir o quedarse
      - Llevar del registro del estado del jugador
+     - Gestionar apuestas y saldo
      
-COlABORADORES:
+COLABORADORES:
      - Mazo
      - Mano
      - Carta        
-
-
 */
+
 class Jugador : public Usuario {
 private:
     std::string nombre;
@@ -49,6 +47,9 @@ public:
     int ingresarApuesta() const;
     bool colocarApuesta(int monto);
     void limpiarApuesta();
+    
+    // NUEVO: Método específico para doblar la apuesta
+    bool doblarApuesta();
 
     int pagarVictoria(bool blackjack);
     void pagarEmpate();

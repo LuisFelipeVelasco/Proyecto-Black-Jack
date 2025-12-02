@@ -28,11 +28,14 @@ COlABORADORES:
 
 */
 class Crupier : public Usuario {
+private:
+     bool cartaOcultaRevelada= false;
 public:
     Crupier();
 
-    void mostrarPrimeraCarta() const;
-    void MostrarManoCompleta() const;
+    void RevelarCartaOculta() ;
+    void MostrarManoCompleta() ;
+    void MostrarMano();
 };
 
 #endif // CRUPIER_H
