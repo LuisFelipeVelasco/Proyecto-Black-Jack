@@ -8,18 +8,23 @@
 #include "Juego.h"
 #include <iostream>
 
+
 int main() {
     std::string nombre;
     int saldo;
+    Crupier crupier;
+    Mazo mazo;
+    Mano mano;
+
     Vista vista;
     std::cout << "Ingrese su nombre: ";
     std::cin >> nombre;
     std::cout << "Ingrese su saldo inicial: $";
     std::cin >> saldo;
-    Jugador jugador(nombre, saldo);
-    Crupier crupier;
-    Mazo mazo;
-    Juego juego(jugador.obtenerNombre(), jugador.obtenerSaldo(),vista);
-    vista.IniciarPrograma(crupier , jugador, mazo, juego);
+    Juego juego(nombre, saldo, vista, mazo, crupier, mano);
+    vista.setJuego(&juego);
+    
+    juego.InterfazPrograma();
+
     return 0;
 }

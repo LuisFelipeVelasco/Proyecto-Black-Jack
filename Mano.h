@@ -48,6 +48,7 @@ public:
     const std::vector<Carta>& obtenerCartas() const;
     void mostrarMano() const;
 
+
 };
 
 #endif // MANO_H

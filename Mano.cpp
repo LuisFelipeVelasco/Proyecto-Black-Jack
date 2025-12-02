@@ -15,6 +15,7 @@ de texto de las cartas.
 
 */
 
+
 Mano::Mano() {}
 
 void Mano::agregarCarta(const Carta& carta){
@@ -27,9 +28,22 @@ void Mano::limpiar(){
 
 int Mano::calcularSuma() const{
     int suma = 0;
+    int ases = 0;
+
+    // Primero sumamos todas las cartas
     for(const auto& carta : cartas){
         suma += carta.obtenerNominal();
+        if(carta.obtenerNominal() == 11) {  // Es un As
+            ases++;
+        }
     }
+
+    // Si nos pasamos de 21 y tenemos ases, convertimos ases de 11 a 1
+    while(suma > 21 && ases > 0) {
+        suma -= 10;  // Convertir un As de 11 a 1
+        ases--;
+    }
+
     return suma;
 }
 
@@ -61,7 +75,8 @@ const std::vector<Carta>& Mano::obtenerCartas() const{
 
 void Mano::mostrarMano() const {
     for (const auto& carta : cartas) {
-        std::cout << carta.obtenerNombre() << " de " << carta.obtenerPalo() << " (valor: " << carta.obtenerNominal() << ")\n";
-
+        std::cout << "  🂠 " << carta.obtenerNombre()
+                  << " (valor: " << carta.obtenerNominal() << ")\n";
     }
+    std::cout << "   Total: " << calcularSuma() << " puntos\n";
 }

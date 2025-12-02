@@ -12,6 +12,15 @@ contiene utilidades para mostrar la mano y calcular el puntaje.
 =================================================================================================================
 
 */
+#include "Jugador.h"
+#include <iostream>
+
+/*
+=================================================================================================================
+                                 Implementacion de la clase Jugador
+=================================================================================================================
+*/
+
 Jugador::Jugador() : Usuario(), nombre(""), saldo(0), apuestaActual(0) {}
 
 Jugador::Jugador(const std::string& nombre, int saldoInicial):
@@ -36,7 +45,7 @@ bool Jugador::puedeApostar(int monto) const {
 bool Jugador::colocarApuesta(int monto) {
     if(puedeApostar(monto)) {
         apuestaActual = monto;
-        saldo -= monto;
+        saldo -= monto;  // Se resta al apostar
         return true;
     }
     return false;
@@ -47,17 +56,34 @@ void Jugador::limpiarApuesta() {
 }
 
 int Jugador::pagarVictoria(bool blackjack) {
-    int ganancia = blackjack ? (apuestaActual * 2.5) : (apuestaActual * 2);
-    saldo += ganancia;
-    return ganancia;
+    // Blackjack: recuperas tu apuesta + ganas 1.5x (total = 2.5x)
+    // Victoria normal: recuperas tu apuesta + ganas 1x (total = 2x)
+    int ganancia = blackjack ? (apuestaActual * 1.5) : apuestaActual;
+    int total = apuestaActual + ganancia;  // Lo que recuperas en total
+    saldo += total;
+
+    std::cout << "\n🎉 ¡¡¡GANASTE!!! ";
+    if(blackjack) {
+        std::cout << "¡BLACKJACK! ";
+    }
+    std::cout << "\n   Apuesta: $" << apuestaActual;
+    std::cout << "\n   Ganancia: +$" << ganancia;
+    std::cout << "\n   Saldo actual: $" << saldo << "\n";
+
+    return total;
 }
 
 void Jugador::pagarEmpate() {
-    saldo += apuestaActual;
+    saldo += apuestaActual;  // Devuelve la apuesta
+    std::cout << "\n EMPATE  ";
+    std::cout << "\n   Se devuelve tu apuesta: $" << apuestaActual;
+    std::cout << "\n   Saldo actual: $" << saldo << "\n";
 }
 
 void Jugador::pagarDerrota() {
-    saldo -= apuestaActual;
+    std::cout << "\n PERDISTE ";
+    std::cout << "\n   Pierdes: -$" << apuestaActual;
+    std::cout << "\n   Saldo actual: $" << saldo << "\n";
 }
 
 int Jugador::obtenerApuestaActual() const {

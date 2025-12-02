@@ -1,11 +1,6 @@
 #ifndef SEGUNDO_PROYECTO_VISTA_H
 #define SEGUNDO_PROYECTO_VISTA_H
 
-#include "Carta.h"
-#include "Mano.h"
-#include "Jugador.h"
-#include "Mazo.h"
-#include "Crupier.h"
 #include "Juego.h"
 
 /*
@@ -30,19 +25,23 @@ COlABORADORES:
      
 */
 
+
+
+
 class Vista {
 private:
-    Mano mano;
-    Crupier crupier;
+     Juego* juego;
 public:
      Vista();
+     void setJuego(Juego* j);
      void MostrarReglas();
-     void IniciarPrograma(Crupier& crupier , Jugador& jugador, Mazo& mazo, Juego& juego);
-     void casoEspecificoBeta(Crupier& crupier , Jugador& jugador, Mazo& mazo,Juego& juego);
+     int InterfazInicial();
      int IngresarApuesta(Jugador& jugador);
      void MostrarMano();
-     void MostrarManoCompleta() const;
+     void MostrarManoCompleta();
      void MostrarMensaje(std::string mensaje);
+     std::string MostrarMensajeYRecibirRespuesta(std:: string mensaje);
+     bool EsperarEnter(std::string Mensaje);
 
 
 };

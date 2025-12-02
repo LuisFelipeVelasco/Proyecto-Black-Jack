@@ -15,6 +15,7 @@ cartas una a una durante la partida. También permite reiniciar el mazo cuando e
 */
 Mazo::Mazo() : indiceActual(0) {
     inicializar();
+    barajar();
 }
 
 void Mazo::inicializar() {

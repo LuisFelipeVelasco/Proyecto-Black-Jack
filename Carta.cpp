@@ -13,22 +13,20 @@ numero y el palo de cada carta, y premite obtener valores segun las reglas del j
 
 */
 
-
-Carta::Carta(int nominal , std::string& palo, const std::string& nombre ):
+Carta::Carta(int nominal, std::string& palo, const std::string& nombre):
     Valornominal(nominal), Palo(palo), Nombre(nombre){}
 
 Carta::Carta():
-    Valornominal(0), Palo("" ""), Nombre(""){}
+    Valornominal(0), Palo(""), Nombre("") {}
 
-int Carta::obtenerNominal() const{
+int Carta::obtenerNominal() const {
     return Valornominal;
 }
 
-std::string Carta::obtenerPalo() const{
+std::string Carta::obtenerPalo() const {
     return Palo;
 }
 
-std::string Carta::obtenerNombre() const{
+std::string Carta::obtenerNombre() const {
     return Nombre;
 }
-
