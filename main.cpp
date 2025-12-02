@@ -8,7 +8,6 @@
 #include "Juego.h"
 #include <iostream>
 
-
 int main() {
     std::string nombre;
     int saldo;
@@ -17,10 +16,24 @@ int main() {
     Mano mano;
 
     Vista vista;
+    
+    std::cout << "╔════════════════════════════════════════════╗\n";
+    std::cout << "║     BIENVENIDO AL BLACKJACK MEJORADO      ║\n";
+    std::cout << "╚════════════════════════════════════════════╝\n\n";
+    
     std::cout << "Ingrese su nombre: ";
     std::cin >> nombre;
+    
     std::cout << "Ingrese su saldo inicial: $";
     std::cin >> saldo;
+    
+    // Validar saldo inicial
+    while(saldo <= 0) {
+        std::cout << "⚠️ El saldo debe ser mayor a $0\n";
+        std::cout << "Ingrese su saldo inicial: $";
+        std::cin >> saldo;
+    }
+    
     Juego juego(nombre, saldo, vista, mazo, crupier, mano);
     vista.setJuego(&juego);
     

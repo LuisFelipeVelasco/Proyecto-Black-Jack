@@ -1,7 +1,6 @@
 #include "Jugador.h"
 #include <iostream>
 
-
 /*
 =================================================================================================================
                                  Implementacion de la clase Jugador
@@ -9,15 +8,6 @@
 Implementa el comportamiento del jugador humano dentro del BlackJack. Maneja su mano, su estado dentro del 
 juego, decisiones como pedir o quedarse, y controla su apuesta o puntos según la implementación. También 
 contiene utilidades para mostrar la mano y calcular el puntaje.
-=================================================================================================================
-
-*/
-#include "Jugador.h"
-#include <iostream>
-
-/*
-=================================================================================================================
-                                 Implementacion de la clase Jugador
 =================================================================================================================
 */
 
@@ -51,6 +41,17 @@ bool Jugador::colocarApuesta(int monto) {
     return false;
 }
 
+// NUEVO: Método específico para doblar la apuesta
+bool Jugador::doblarApuesta() {
+    // Verificar que hay suficiente saldo para la apuesta adicional
+    if(saldo >= apuestaActual) {
+        saldo -= apuestaActual;      // Restar la apuesta adicional del saldo
+        apuestaActual *= 2;          // Duplicar la apuesta total
+        return true;
+    }
+    return false;
+}
+
 void Jugador::limpiarApuesta() {
     apuestaActual = 0;
 }
@@ -75,13 +76,13 @@ int Jugador::pagarVictoria(bool blackjack) {
 
 void Jugador::pagarEmpate() {
     saldo += apuestaActual;  // Devuelve la apuesta
-    std::cout << "\n EMPATE  ";
+    std::cout << "\n🤝 EMPATE  ";
     std::cout << "\n   Se devuelve tu apuesta: $" << apuestaActual;
     std::cout << "\n   Saldo actual: $" << saldo << "\n";
 }
 
 void Jugador::pagarDerrota() {
-    std::cout << "\n PERDISTE ";
+    std::cout << "\n❌ PERDISTE ";
     std::cout << "\n   Pierdes: -$" << apuestaActual;
     std::cout << "\n   Saldo actual: $" << saldo << "\n";
 }

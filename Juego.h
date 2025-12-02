@@ -1,6 +1,13 @@
 //@Autores : Luis Felipe Velasco Chilito , Alejandro Velez , Julio Cesar , Jeronimo Imbachi , Leonardo Rosero
 //@fecha: 7/10/2025
 
+#ifndef JUEGO_H
+#define JUEGO_H
+
+#include "Jugador.h"
+#include "Crupier.h"
+#include "Mazo.h"
+#include "Mano.h"
 
 /*
 =================================================================================================================
@@ -10,31 +17,21 @@ CLASE:
      Juego
 
 RESPONSABILIDADES:
-     - Cordinar el flujo del juego
+     - Coordinar el flujo del juego
      - Gestionar al jugador, crupier, mazo, y vista
-     - Inicar y reiniciar partidas
-     - COntrolar turnos y resultados
+     - Iniciar y reiniciar partidas
+     - Controlar turnos y resultados
      - Robar cartas del mazo
 
-COlABORADORES:
+COLABORADORES:
      - Jugador
      - Crupier
      - Mazo
      - Vista
-
-
 */
-#ifndef JUEGO_H
-#define JUEGO_H
-
-#include "Jugador.h"
-#include "Crupier.h"
-#include "Mazo.h"
-#include "Mano.h"
-
-
 
 class Vista;
+
 class Juego {
 private:
      Jugador jugador;
@@ -43,8 +40,11 @@ private:
      Mazo& mazo;
      Mano& mano;
 
+     // Métodos auxiliares privados
+     bool validarComando(const std::string& comando);
+
 public:
-     Juego(const std::string& nombreJugador, int saldoInicial, Vista& vista, Mazo& mazo, Crupier& crupier , Mano& mano );
+     Juego(const std::string& nombreJugador, int saldoInicial, Vista& vista, Mazo& mazo, Crupier& crupier, Mano& mano);
 
      bool prepararRonda(int apuesta);
      void Barajar();
@@ -60,6 +60,7 @@ public:
      Jugador& obtenerJugador() { return jugador; }
      Crupier& obtenerCrupier() { return crupier; }
      Mano& obtenerMano(){return mano;}
+     
      void InterfazPrograma();
      void Ronda();
 };
