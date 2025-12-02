@@ -30,3 +30,10 @@ std::string Carta::obtenerPalo() const {
 std::string Carta::obtenerNombre() const {
     return Nombre;
 }
+
+
+void Carta::MostrarCarta() const {
+    // Usa los getters que ya tienes (según tu Mano.cpp: obtenerNombre() y obtenerNominal())
+    std::cout << "  🂠 " << obtenerNombre()
+              << " (valor: " << obtenerNominal() << ")\n";
+}

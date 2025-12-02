@@ -39,6 +39,7 @@ public:
   int obtenerNominal() const;
   std::string obtenerPalo() const;
   std::string obtenerNombre() const;
+    void MostrarCarta() const;
 
 
 
