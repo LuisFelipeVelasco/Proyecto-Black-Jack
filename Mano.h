@@ -7,6 +7,7 @@
 #define MANO_H
 
 #include <vector>
+#include <cassert>   // <-- agregado para habilitar assert
 #include "Carta.h"
 
 
@@ -22,6 +23,7 @@ RESPONSABILIDADES:
      - Calcular el valor total de la mano
      - Maejar el valor total de la mano
      - Mostrar cartas
+     - (usa assert para validar entradas y estados internos)   // <-- agregado SIN modificar nada
 
 COlABORADORES:
      - Carta
@@ -37,15 +39,15 @@ private:
 public:
     Mano();
 
-    void agregarCarta(const Carta& carta);
+    void agregarCarta(const Carta& carta);   // assert en .cpp valida la carta
     void limpiar();
     
-    int calcularSuma() const;
+    int calcularSuma() const;                // assert en .cpp valida mano no vacía
     int contarCartas() const;
     bool tieneBlackjack() const;
     bool estaPasado() const;
     int obtenerSuma() const;
-    const std::vector<Carta>& obtenerCartas() const;
+    const std::vector<Carta>& obtenerCartas() const;  // assert en .cpp evita mano vacía
     void mostrarMano() const;
 
 

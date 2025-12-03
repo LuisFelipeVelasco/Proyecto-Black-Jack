@@ -5,15 +5,23 @@
 #include <sstream>
 #include "Jugador.h"
 #include <cctype>
+#include <cassert>
 
 static Mazo mazoGlobal;
 
 Juego::Juego(const std::string& nombreJugador, int saldoInicial, Vista& vista, Mazo& mazo, Crupier& crupier, Mano& mano)
     : jugador(nombreJugador, saldoInicial), vista(vista), mazo(mazo), crupier(crupier), mano(mano) {
+    #ifndef NDEBUG
+    assert(saldoInicial >= 0 && "El saldo inicial no puede ser negativo");
+    #endif
 }
 
 bool Juego::prepararRonda(int apuesta) {
     reiniciarRonda();
+
+    #ifndef NDEBUG
+    assert(apuesta > 0 && "La apuesta debe ser mayor que 0");
+    #endif
 
     if(!jugador.colocarApuesta(apuesta)) {
         return false;
@@ -25,6 +33,10 @@ void Juego::Barajar() {
     jugador.recibirCarta(mazoGlobal.repartirCarta());
     jugador.recibirCarta(mazoGlobal.repartirCarta());
     std::cout << "\n";
+
+    #ifndef NDEBUG
+    assert(jugador.contarCartas() == 2 && "El jugador debe tener 2 cartas iniciales");
+    #endif
 
     Carta carta1 = mazoGlobal.repartirCarta();
     vista.MostrarMensaje("El crupier recibe ");
@@ -38,6 +50,10 @@ void Juego::Barajar() {
     vista.MostrarMensaje("El crupier tiene una carta oculta\n");
     crupier.recibirCarta(carta2);
 
+    #ifndef NDEBUG
+    assert(crupier.contarCartas() == 2 && "El crupier debe recibir 2 cartas iniciales");
+    #endif
+
     jugador.mostrarMano();
 
     if(jugador.obtenerMano().tieneBlackjack()) {
@@ -47,6 +63,10 @@ void Juego::Barajar() {
 
 // Método mejorado para validar comandos
 bool Juego::validarComando(const std::string& comando) {
+    #ifndef NDEBUG
+    assert(!comando.empty() && "El comando no puede estar vacío");
+    #endif
+
     std::string cmd = comando;
     for(auto& c : cmd) c = toupper(c);
     
@@ -59,6 +79,10 @@ bool Juego::validarComando(const std::string& comando) {
 void Juego::turnoJugador(std::string comando) {
     // Convertir a mayúscula para simplificar comparaciones
     for(auto& c : comando) c = toupper(c);
+
+    #ifndef NDEBUG
+    assert(!comando.empty() && "El comando no puede estar vacío en turnoJugador");
+    #endif
     
     if(comando == "P" || comando == "PEDIR" || comando == "HIT") {
         std::ostringstream mensaje;
@@ -71,6 +95,13 @@ void Juego::turnoJugador(std::string comando) {
         mensaje << "Mano del jugador " << jugador.obtenerNombre() << ":\n";
         vista.MostrarMensaje(mensaje.str());
         jugador.mostrarMano();
+
+        #ifndef NDEBUG
+        { 
+            int suma = jugador.suma();
+            assert(suma >= 0 && suma <= 31 && "Suma del jugador fuera de rango después de pedir");
+        }
+        #endif
 
         if(jugador.obtenerMano().estaPasado()) {
             std::ostringstream msg;
@@ -91,12 +122,20 @@ void Juego::turnoJugador(std::string comando) {
             vista.MostrarMensaje("\n⚠️ Solo puedes doblar con tus dos primeras cartas.\n");
             return;
         }
+
+        #ifndef NDEBUG
+        assert(jugador.contarCartas() == 2 && "Solo se puede doblar con dos cartas");
+        #endif
         
         // Verificar que tiene suficiente saldo
         if(!jugador.puedeApostar(jugador.obtenerApuestaActual())) {
             vista.MostrarMensaje("\n⚠️ No tienes suficiente saldo para doblar.\n");
             return;
         }
+
+        #ifndef NDEBUG
+        assert(jugador.puedeApostar(jugador.obtenerApuestaActual()) && "Saldo insuficiente para doblar apuesta");
+        #endif
         
         int apuestaOriginal = jugador.obtenerApuestaActual();
         
@@ -108,6 +147,9 @@ void Juego::turnoJugador(std::string comando) {
         
         // Correccion de usar el método doblarApuesta() que maneja correctamente el saldo
         if(!jugador.doblarApuesta()) {
+            #ifndef NDEBUG
+            assert(false && "Error inesperado al ejecutar doblarApuesta()");
+            #endif
             vista.MostrarMensaje("\n⚠️ Error al doblar la apuesta.\n");
             return;
         }
@@ -116,10 +158,21 @@ void Juego::turnoJugador(std::string comando) {
         vista.MostrarMensaje("\nRecibiendo una carta final...\n");
         jugador.recibirCarta(mazoGlobal.repartirCarta());
         
+        #ifndef NDEBUG
+        assert(jugador.contarCartas() == 3 && "Al doblar, el jugador debe tener 3 cartas en total");
+        #endif
+
         mensaje.str("");
         mensaje << "Mano del jugador " << jugador.obtenerNombre() << ":\n";
         vista.MostrarMensaje(mensaje.str());
         jugador.mostrarMano();
+
+        #ifndef NDEBUG
+        {
+            int suma = jugador.suma();
+            assert(suma >= 0 && suma <= 31 && "Suma del jugador fuera de rango después de doblar");
+        }
+        #endif
 
         if(jugador.obtenerMano().estaPasado()) {
             std::ostringstream msg;
@@ -137,15 +190,30 @@ void Juego::turnoJugador(std::string comando) {
 bool Juego::turnoCrupier() {
     vista.MostrarManoCompleta();
 
+    #ifndef NDEBUG
+    assert(crupier.contarCartas() >= 1 && "El crupier debe tener al menos 1 carta al iniciar su turno");
+    #endif
+
     while(crupier.suma() < 17) {
         vista.MostrarMensaje("\nEl crupier debe pedir (menos de 17)...\n");
         crupier.recibirCarta(mazoGlobal.repartirCarta());
         vista.MostrarManoCompleta();
 
+        #ifndef NDEBUG
+        {
+            int sumaC = crupier.suma();
+            assert(sumaC >= 0 && sumaC <= 31 && "Suma del crupier fuera de rango después de pedir");
+        }
+        #endif
+
         if(crupier.obtenerMano().estaPasado()) {
             return false;
         }
     }
+
+    #ifndef NDEBUG
+    assert(crupier.suma() >= 17 && "Regla del crupier: debe plantarse con 17 o más");
+    #endif
 
     if(crupier.suma() >= 17 && !crupier.obtenerMano().estaPasado()) {
         return true;
@@ -156,6 +224,11 @@ bool Juego::turnoCrupier() {
 int Juego::compararResultado() const {
     int sumaJugador = jugador.suma();
     int sumaCrupier = crupier.suma();
+
+    #ifndef NDEBUG
+    assert(sumaJugador >= 0 && sumaJugador <= 31 && "Suma del jugador fuera de rango en compararResultado");
+    assert(sumaCrupier >= 0 && sumaCrupier <= 31 && "Suma del crupier fuera de rango en compararResultado");
+    #endif
 
     if(jugador.obtenerMano().estaPasado()) {
         return -1;
@@ -178,6 +251,11 @@ int Juego::compararResultado() const {
 
 void Juego::liquidarResultado() {
     int resultado = compararResultado();
+
+    #ifndef NDEBUG
+    assert((resultado == -1 || resultado == 0 || resultado == 1 || resultado == 2) && "Resultado inválido en compararResultado");
+    #endif
+
     std::ostringstream mensaje;
 
     mensaje << "\n" << std::string(60, '=') << "\n" << " COMPARACIÓN FINAL:\n"
@@ -200,12 +278,21 @@ void Juego::liquidarResultado() {
     }
 
     jugador.limpiarApuesta();
+
+    #ifndef NDEBUG
+    assert(jugador.obtenerApuestaActual() == 0 && "La apuesta debe haber sido limpiada al final de la liquidación");
+    #endif
 }
 
 void Juego::reiniciarRonda() {
     jugador.limpiarMano();
     crupier.limpiarMano();
     jugador.limpiarApuesta();
+
+    #ifndef NDEBUG
+    assert(jugador.contarCartas() == 0 && "La mano del jugador no se reinició correctamente");
+    assert(crupier.contarCartas() == 0 && "La mano del crupier no se reinició correctamente");
+    #endif
 }
 
 bool Juego::mazoCorto() const {
@@ -270,6 +357,10 @@ void Juego::Ronda() {
     vista.MostrarMensaje(mensaje.str());
     
     int apuesta = vista.IngresarApuesta(jugador);
+
+    #ifndef NDEBUG
+    assert(apuesta > 0 && "Apuesta inválida en Ronda");
+    #endif
 
     if(!prepararRonda(apuesta)) {
         vista.MostrarMensaje("❌ No se pudo ingresar la apuesta");

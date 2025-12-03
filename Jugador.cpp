@@ -1,5 +1,6 @@
 #include "Jugador.h"
 #include <iostream>
+#include <cassert>
 
 /*
 =================================================================================================================
@@ -14,9 +15,13 @@ contiene utilidades para mostrar la mano y calcular el puntaje.
 Jugador::Jugador() : Usuario(), nombre(""), saldo(0), apuestaActual(0) {}
 
 Jugador::Jugador(const std::string& nombre, int saldoInicial):
-    Usuario(), nombre(nombre), saldo(saldoInicial), apuestaActual(0) {}
+    Usuario(), nombre(nombre), saldo(saldoInicial), apuestaActual(0) 
+{
+    assert(saldoInicial >= 0 && "El saldo inicial no puede ser negativo");
+}
 
 std::string Jugador::obtenerNombre() const {
+    assert(!nombre.empty() && "El nombre del jugador no puede estar vacío");
     return nombre;
 }
 
@@ -25,14 +30,18 @@ int Jugador::obtenerSaldo() const {
 }
 
 void Jugador::establecerSaldo(int nuevoSaldo) {
+    assert(nuevoSaldo >= 0 && "El saldo no puede ser negativo");
     saldo = nuevoSaldo;
 }
 
 bool Jugador::puedeApostar(int monto) const {
-    return saldo >= monto && monto > 0;
+    assert(monto > 0 && "La apuesta debe ser mayor que 0");
+    return saldo >= monto;
 }
 
 bool Jugador::colocarApuesta(int monto) {
+    assert(monto > 0 && "La apuesta debe ser mayor que 0");
+
     if(puedeApostar(monto)) {
         apuestaActual = monto;
         saldo -= monto;  // Se resta al apostar
@@ -44,6 +53,9 @@ bool Jugador::colocarApuesta(int monto) {
 // NUEVO: Método específico para doblar la apuesta
 bool Jugador::doblarApuesta() {
     // Verificar que hay suficiente saldo para la apuesta adicional
+    assert(apuestaActual > 0 && "No se puede doblar si no hay apuesta activa");
+    assert(saldo >= 0 && "El saldo debe ser válido");
+
     if(saldo >= apuestaActual) {
         saldo -= apuestaActual;      // Restar la apuesta adicional del saldo
         apuestaActual *= 2;          // Duplicar la apuesta total
@@ -57,6 +69,8 @@ void Jugador::limpiarApuesta() {
 }
 
 int Jugador::pagarVictoria(bool blackjack) {
+    assert(apuestaActual > 0 && "No se puede pagar victoria sin apuesta activa");
+
     // Blackjack: recuperas tu apuesta + ganas 1.5x (total = 2.5x)
     // Victoria normal: recuperas tu apuesta + ganas 1x (total = 2x)
     int ganancia = blackjack ? (apuestaActual * 1.5) : apuestaActual;
@@ -75,6 +89,8 @@ int Jugador::pagarVictoria(bool blackjack) {
 }
 
 void Jugador::pagarEmpate() {
+    assert(apuestaActual > 0 && "No se puede empatar sin apuesta activa");
+
     saldo += apuestaActual;  // Devuelve la apuesta
     std::cout << "\n🤝 EMPATE  ";
     std::cout << "\n   Se devuelve tu apuesta: $" << apuestaActual;
@@ -82,6 +98,8 @@ void Jugador::pagarEmpate() {
 }
 
 void Jugador::pagarDerrota() {
+    assert(apuestaActual > 0 && "No se puede perder sin apuesta activa");
+
     std::cout << "\n❌ PERDISTE ";
     std::cout << "\n   Pierdes: -$" << apuestaActual;
     std::cout << "\n   Saldo actual: $" << saldo << "\n";

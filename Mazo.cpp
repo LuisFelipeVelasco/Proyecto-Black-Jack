@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
-
+#include <cassert>
 
 /*
 =================================================================================================================
@@ -16,6 +16,7 @@ cartas una a una durante la partida. También permite reiniciar el mazo cuando e
 Mazo::Mazo() : indiceActual(0) {
     inicializar();
     barajar();
+    assert(!cartas.empty());
 }
 
 void Mazo::inicializar() {
@@ -33,12 +34,17 @@ void Mazo::inicializar() {
             cartas.push_back(Carta(valores[n], palos[p], nombreCompleto));
         }
     }
+
+    assert(cartas.size() == 52);
 }
 
 void Mazo::barajar() {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle(cartas.begin(), cartas.end(), std::default_random_engine(seed));
     indiceActual = 0;
+
+    assert(indiceActual == 0);
+    assert(cartas.size() == 52);
 }
 
 Carta Mazo::repartirCarta() {
@@ -46,18 +52,27 @@ Carta Mazo::repartirCarta() {
         inicializar();
         barajar();
     }
+
+    assert(indiceActual < cartas.size());
+
     return cartas[indiceActual++];
 }
 
 int Mazo::tamano() const {
+    assert(indiceActual >= 0);
+    assert(indiceActual <= cartas.size());
     return cartas.size() - indiceActual;
 }
 
 bool Mazo::mazoCorto() const {
+    assert(tamano() >= 0);
     return tamano() < 15;
 }
 
 void Mazo::limpiar() {
     cartas.clear();
     indiceActual = 0;
+
+    assert(cartas.empty());
+    assert(indiceActual == 0);
 }

@@ -1,6 +1,7 @@
 #include "Vista.h"
 #include <iostream>
 #include "Juego.h"
+#include <cassert>  
 
 /*
 =================================================================================================================
@@ -15,10 +16,13 @@ modelo MVC del proyecto.
 Vista::Vista() : juego(nullptr) {}
 
 void Vista::setJuego(Juego* j) {
+    assert(j != nullptr && "El puntero a Juego no debe ser nullptr");   // <-- agregado
     juego = j;
 }
 
 int Vista::InterfazInicial() {
+    assert(juego != nullptr && "Juego no inicializado antes de usar Vista");   // <-- agregado
+
     int opcion;
     std::cout << "\n"
            "██████╗ ██╗      █████╗  ██████╗██╗  ██╗     ██╗ █████╗  ██████╗██╗  ██╗\n"
@@ -86,6 +90,9 @@ void Vista::MostrarReglas() {
 
 int Vista::IngresarApuesta(Jugador& jugador) {
     int monto;
+    
+    assert(jugador.obtenerSaldo() >= 0 && "Saldo del jugador no puede ser negativo"); // <-- agregado
+
     std::cout << "\n💵 Saldo actual: $" << jugador.obtenerSaldo() << std::endl;
     std::cout << " Ingrese su apuesta: $";
     std::cin >> monto;
@@ -100,10 +107,15 @@ int Vista::IngresarApuesta(Jugador& jugador) {
         std::cin >> monto;
     }
 
+    assert(monto > 0 && "La apuesta debe ser positiva");  // <-- agregado
+    assert(monto <= jugador.obtenerSaldo() && "La apuesta supera el saldo"); // <-- agregado
+
     return monto;
 }
 
 void Vista::MostrarMano() {
+    assert(juego != nullptr && "Juego no debe ser nullptr"); // <-- agregado
+
     const std::vector<Carta>& cartas = juego->obtenerMano().obtenerCartas();
     for(const auto& carta : cartas) {
         std::cout << "  - ";
@@ -112,6 +124,8 @@ void Vista::MostrarMano() {
 }
 
 void Vista::MostrarManoCompleta(){
+    assert(juego != nullptr && "Juego no inicializado"); // <-- agregado
+
     std::cout << "\nMano del Crupier:\n";
     const std::vector<Carta>& cartas = juego->obtenerCrupier().obtenerMano().obtenerCartas();
     for(const auto& carta : cartas) {

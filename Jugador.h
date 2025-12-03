@@ -5,6 +5,7 @@
 #define JUGADOR_H
 
 #include <string>
+#include <cassert>  
 #include "Usuario.h"
 
 /*
@@ -45,7 +46,9 @@ public:
 
     bool puedeApostar(int monto) const;
     int ingresarApuesta() const;
+
     bool colocarApuesta(int monto);
+
     void limpiarApuesta();
     
     // NUEVO: Método específico para doblar la apuesta

@@ -5,6 +5,8 @@
 #include "Mano.h"
 
 
+
+
 /*
 =================================================================================================================
                                  Implementacion de la clase Crupier
@@ -17,54 +19,45 @@ automaticas basadas en la reglas del juego
 */
 
 
-Crupier::Crupier() : Usuario() {}
-
-
-//   Mostrar la mano del crupier (carta oculta aún no revelada)
+Crupier::Crupier() : Usuario() {
+    assert(cartaOcultaRevelada == false);
+}
 
 void Crupier::MostrarMano() {
     std::cout << "\nMano del crupier:\n";
 
+    assert(mano.contarCartas() >= 0);
+
     if (!cartaOcultaRevelada) {
-
-        // Mostrar solo la primera carta
         if (mano.contarCartas() > 0) {
-            const Carta &c = mano.obtenerCartas()[0];
-            std::cout << "  carta: " << c.obtenerNombre()
-                      << " (valor: " << c.obtenerNominal() << ")\n";
+            mano.obtenerCartas()[0].MostrarCarta();
         } else {
-            std::cout << "  [Sin cartas]\n";
+            std::cout << "  [sin cartas]\n";
         }
-
-        // Mostrar la carta oculta
         std::cout << "[Carta oculta]\n";
-
-    } else {
+    }
+    else {
         MostrarManoCompleta();
     }
 }
 
-
-//        Revelar la carta oculta
-
 void Crupier::RevelarCartaOculta() {
+    assert(cartaOcultaRevelada == false);
     cartaOcultaRevelada = true;
 }
-
-
-//   Mostrar TODA la mano completa del crupier
 
 void Crupier::MostrarManoCompleta() {
     std::cout << "\nMano del crupier:\n";
 
-    // Recorrer las cartas reales de la mano
-    for (const Carta &c : mano.obtenerCartas()) {
-        std::cout << "  🂠 " << c.obtenerNombre()
-                  << " (valor: " << c.obtenerNominal() << ")\n";
+    assert(mano.contarCartas() > 0);
+
+    for (const auto& c : mano.obtenerCartas()) {
+        assert(c.obtenerNominal() >= 1 && c.obtenerNominal() <= 11);
+        c.MostrarCarta();
     }
 
-    std::cout << "Valor total: " << mano.calcularSuma() << "\n";
+    int total = mano.calcularSuma();
+    assert(total >= 0 && total <= 31);
+
+    std::cout << "Valor total: " << total << "\n";
 }
-
-
-

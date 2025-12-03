@@ -2,7 +2,7 @@
 #define SEGUNDO_PROYECTO_VISTA_H
 
 #include "Juego.h"
-
+#include <cassert>
 /*
 =================================================================================================================
                                             TARJETA CRC
